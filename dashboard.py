@@ -14,7 +14,6 @@ def load_and_prepare_data(csv_path='data/RESULTADOS/df_final.csv'):
         df_raw = pd.read_csv(csv_path)
         df = df_raw.copy()
 
-        # Padronizar nomes das colunas para facilitar (opcional, mas recomendado)
         column_mapping = {
             'Município': 'municipio',
             'Ano': 'ano',
@@ -27,20 +26,12 @@ def load_and_prepare_data(csv_path='data/RESULTADOS/df_final.csv'):
             'VAB Serviços (R$ 1.000)': 'vab_servicos_mil_reais',
             'População': 'populacao',
             'Focos de Queimada': 'focos_queimada',
-            'Total de Benefícios Básicos (Bolsa Família)': 'bolsa_familia_beneficios', # Ou um nome mais curto
+            'Total de Benefícios Básicos (Bolsa Família)': 'bolsa_familia_beneficios',
             'Área plantada soja (ha)': 'area_soja_ha',
             'Área plantada milho (ha)': 'area_milho_ha',
             'Total Rebanho (Bovino)': 'rebanho_bovino_cabecas'
         }
         df.rename(columns=column_mapping, inplace=True)
-
-        # Converter colunas numéricas que podem ter sido lidas como string (se houver vírgulas como decimal)
-        # O seu exemplo de CSV parece já estar com pontos decimais, então isso pode não ser necessário.
-        # Mas é uma boa prática verificar. Ex:
-        # cols_to_numeric = ['desmatamento_km2', 'pib_per_capita', ...]
-        # for col in cols_to_numeric:
-        #     if df[col].dtype == 'object':
-        #         df[col] = df[col].str.replace(',', '.', regex=False).astype(float)
 
         # Certifica que 'codigo_ibge' é string para o mapa
         df['codigo_ibge'] = df['codigo_ibge'].astype(str)
@@ -55,9 +46,9 @@ def load_and_prepare_data(csv_path='data/RESULTADOS/df_final.csv'):
         st.error(f"ERRO ao carregar ou processar os dados: {e}")
         return pd.DataFrame()
 
-df_data = load_and_prepare_data() # Carrega seus dados consolidados
+df_data = load_and_prepare_data()
 
-# --- Load GeoJSON ---
+# --- Carrega o GeoJSON ---
 geojson_path = 'data/GEOJSON/municipios_pa.json' 
 feature_id_key_geojson = 'properties.id'      
 
@@ -135,7 +126,7 @@ with tab1:
             df_map_year = df_data[df_data['ano'] == selected_year_global]
             if not df_map_year.empty:
                 max_desmatamento_ano = df_map_year['desmatamento_km2'].max()
-                fig_map = px.choropleth_mapbox(
+                fig_map = px.choropleth_map(
                     df_map_year,
                     geojson=geojson_para,
                     locations='codigo_ibge',
@@ -143,7 +134,7 @@ with tab1:
                     color='desmatamento_km2',
                     color_continuous_scale="Reds",
                     range_color=(0, max_desmatamento_ano if max_desmatamento_ano > 0 else 1), # Evita erro se max for 0
-                    mapbox_style="carto-positron",
+                    map_style="carto-positron",
                     zoom=4.2,
                     center={"lat": -3.7, "lon": -52.5}, # Ajustado ligeiramente
                     opacity=0.7,
@@ -236,8 +227,8 @@ with tab2:
                     df_scatter_socio,
                     x=selected_indicador_col,
                     y='desmatamento_km2',
-                    color='municipio', # Pode ficar poluído, considere remover ou usar 'size'
-                    size='populacao',  # Exemplo de uso de 'size'
+                    color='municipio',
+                    size='populacao', 
                     hover_name='municipio',
                     title=f'Desmatamento vs. {selected_indicador_label} em {selected_year_global}',
                     labels={selected_indicador_col: selected_indicador_label, 'desmatamento_km2': 'Desmatamento (km²)'}
@@ -253,15 +244,15 @@ with tab2:
             df_map_socio_year = df_data[df_data['ano'] == selected_year_global]
             if not df_map_socio_year.empty and selected_indicador_col in df_map_socio_year.columns:
                 max_val_indicador = df_map_socio_year[selected_indicador_col].max()
-                fig_map_socio = px.choropleth_mapbox(
+                fig_map_socio = px.choropleth_map(
                     df_map_socio_year,
                     geojson=geojson_para,
                     locations='codigo_ibge',
                     featureidkey=feature_id_key_geojson,
                     color=selected_indicador_col,
-                    color_continuous_scale="Viridis", # Outra escala de cor
+                    color_continuous_scale="Viridis",
                     range_color=(0, max_val_indicador if max_val_indicador > 0 else 1),
-                    mapbox_style="carto-positron",
+                    map_style="carto-positron",
                     zoom=4.2, center={"lat": -3.7, "lon": -52.5}, opacity=0.7,
                     labels={selected_indicador_col: selected_indicador_label},
                     hover_name='municipio'
@@ -272,7 +263,6 @@ with tab2:
                 st.info(f"Não há dados de '{selected_indicador_label}' para o ano {selected_year_global} para exibir no mapa.")
 
 
-# --- Tab 3: Correlações e Relações ---
 # --- Tab 3: Correlações e Relações ---
 with tab3:
     st.header("Correlações e Relações entre Variáveis")
@@ -302,10 +292,10 @@ with tab3:
             df_corr_analysis = pd.DataFrame() # Inicializa
 
             if analysis_level == "Estado do Pará (Agregado por Ano)":
-                # Definir funções de agregação para o nível estadual
+                # Define funções de agregação para o nível estadual
                 agg_rules_estado = {}
                 # Colunas que serão somadas. 'pib_total_mil_reais' é necessário para calcular 'pib_per_capita' estadual.
-                # Adicionamos 'pib_total_mil_reais' aqui se existir no df_data original
+                # Adicionado 'pib_total_mil_reais' aqui se existir no df_data original
                 sum_cols_candidates = ['desmatamento_km2', 'vab_agro_mil_reais',
                                    'vab_industria_mil_reais', 'vab_servicos_mil_reais', 'populacao',
                                    'focos_queimada', 'bolsa_familia_beneficios', 'area_soja_ha',
@@ -395,14 +385,7 @@ with tab3:
                         if analysis_level == "Estado do Pará (Agregado por Ano)" and 'ano' in df_estado_agg.columns: # 'ano' não estará em df_corr_analysis diretamente
                             color_options_scatter.append('ano') # Precisaria adicionar 'ano' ao df_corr_analysis para o estado
                         elif analysis_level != "Estado do Pará (Agregado por Ano)" and 'municipio' in df_data.columns and selected_municipalities_global:
-                             # Para municipal, se quisermos colorir por ano ou município, o df_corr_analysis precisaria dessas colunas
-                             # Atualmente df_corr_analysis só tem as colunas numéricas para correlação.
-                             # Para colorir, precisaríamos de um dataframe mais completo para o scatter.
-                             pass # Simplificando: sem coloração dinâmica por enquanto para manter df_corr_analysis focado.
-
-                        # Para colorir o scatter plot de forma útil, especialmente no nível municipal,
-                        # pode ser melhor usar o df_municipal_filtered diretamente, que ainda tem 'ano' e 'municipio'.
-                        # E para o estado, df_estado_agg que tem 'ano'.
+                             pass 
                         
                         df_for_scatter = df_corr_analysis # Use o df_corr_analysis que já tem as colunas numéricas
                         hover_name_scatter = None
@@ -415,9 +398,6 @@ with tab3:
                             color_val_scatter_final = 'ano' if 'ano' in df_for_scatter.columns else None
                         
                         elif selected_municipalities_global: # Nível Municipal
-                            # O df_corr_analysis atual para municipal não tem 'ano' ou 'municipio'
-                            # Para adicionar, precisaríamos reconstruí-lo ou usar o df_municipal_filtered
-                            # Vamos usar o df_municipal_filtered que é mais completo
                             df_for_scatter = df_data[df_data['municipio'].isin(selected_municipalities_global)]
                             color_val_scatter_final = 'municipio' # Ou 'ano'
                             hover_name_scatter = 'municipio'
@@ -425,7 +405,6 @@ with tab3:
                         with col3_t3:
                              # Manter a opção de cor, mas ela pode não funcionar perfeitamente sem ajustar df_for_scatter
                              color_val_temp = st.selectbox('Colorir por (opcional):', options=[None, 'ano', 'municipio'], index=0, key="scatter_color")
-                             # Usaremos color_val_scatter_final que é mais seguro
                         
                         if x_axis_val and y_axis_val and x_axis_val != y_axis_val:
                             # Remove NaNs apenas para as colunas X e Y do scatter plot
@@ -566,8 +545,7 @@ with tab4:
             st.plotly_chart(fig_vab_pie_over_time, use_container_width=True)
 
 
-# --- Footer (Opcional) ---
+# --- Footer ---
 st.markdown("---")
 st.markdown("Desenvolvido como parte do Desafio Zetta Lab 2025.")
-st.markdown("Fontes de Dados: IBGE (SIDRA), INPE (TerraBrasilis/Queimadas), MDS (Bolsa Família/Auxílio Brasil - via Portal da Transparência ou dados compilados).")
-
+st.markdown("Fontes de Dados: IBGE (SIDRA), INPE (TerraBrasilis/Queimadas), MDS (Bolsa Família - via VIS DATA 3).")

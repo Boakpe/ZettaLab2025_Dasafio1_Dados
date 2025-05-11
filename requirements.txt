@@ -1,13 +1,4 @@
 pandas
-seaborn
-geopandas
-geobr
-imageio
-xlrd
-openpyxl
 streamlit
 plotly
-statsmodels
-dash
-nbformat
 scikit-learn

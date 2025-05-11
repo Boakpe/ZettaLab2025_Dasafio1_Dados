@@ -7,7 +7,7 @@ Este repositório contém a solução para o Desafio I do Zetta Lab 2025.
 ```
 desafio1_zetta_lab/
 ├── data/             # Dados utilizados no desafio (IBGE, INPE, etc.)
-├── src/              # Notebooks e scripts de processamento de dados
+├── src/              # Notebooks de processamento de dados
 │   ├── integracao.ipynb  # Integra e consolida todos os dados (desmatamento, PIB, queimadas, Bolsa Família, plantações e rebanho bovino) em um único dataset final
 │   ├── pib.ipynb         # Processa e filtra os dados de PIB dos municípios do Pará
 │   ├── plantacoes.ipynb  # Processa dados de área plantada de soja e milho por município e ano

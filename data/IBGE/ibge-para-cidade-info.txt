@@ -1,0 +1,13 @@
+Notas:													
+Escolarização 6 a 14 anos : [população residente no município de 6 a 14 anos de idade matriculada no ensino regular/total de população residente no município de 6 a 14 anos de idade] x 100													
+Fontes:													
+Área Territorial: Área territorial brasileira 2022. Rio de Janeiro: IBGE, 2023													
+População no último censo: Censo 2022: População e Domicílios - Primeiros Resultados - Atualizado em 22/12/2023													
+Densidade demográfica: Censo 2022: População e Domicílios - Primeiros Resultados - Atualizado em 22/12/2023													
+População estimada: IBGE, Diretoria de Pesquisas, Coordenação de População e Indicadores Sociais, Estimativas da população residente com data de referência 1o de julho de 2024													
+Escolarização 6 a 14 anos : IBGE, Censo Demográfico 2010													
+IDHM Índice de desenvolvimento humano municipal : Programa das Nações Unidas para o Desenvolvimento - PNUD													
+Mortalidade infantil: Ministério da Saúde, Departamento de Informática do Sistema Único de Saúde - DATASUS 2022													
+Total de receitas brutas realizadas: Siconfi: Sistema de Informações Contábeis e Fiscais do Setor Público Brasileiro. Brasília, DF, [2023]. Disponível em: https://siconfi.tesouro.gov.br/siconfi/pages/public/consulta_finbra/finbra_list.jsf. Acesso em: jun. 2024, Contas anuais. Receitas orçamentárias realizadas (Anexo I-C) 2023 e Despesas orçamentárias empenhadas (Anexo I-D) 2023. In: Brasil. Secretaria do Tesouro Nacional													
+Total de despesas brutas empenhadas: Siconfi: Sistema de Informações Contábeis e Fiscais do Setor Público Brasileiro. Brasília, DF, [2023]. Disponível em: https://siconfi.tesouro.gov.br/siconfi/pages/public/consulta_finbra/finbra_list.jsf. Acesso em: jun. 2024, Contas anuais. Receitas orçamentárias realizadas (Anexo I-C) 2023 e Despesas orçamentárias empenhadas (Anexo I-D) 2023. In: Brasil. Secretaria do Tesouro Nacional													
+PIB per capita: IBGE, em parceria com os Órgãos Estaduais de Estatística, Secretarias Estaduais de Governo e Superintendência da Zona Franca de Manaus - SUFRAMA													

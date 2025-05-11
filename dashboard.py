@@ -2,27 +2,14 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 import json
-# Adicionar go para make_subplots
 import plotly.graph_objects as go
 
 # --- 0. Streamlit Page Configuration ---
 st.set_page_config(layout="wide", page_title="Impactos do Desmatamento no Pará")
 
-# Set max width (opcional, mas você tinha)
-st.html("""
-    <style>
-        .stMainBlockContainer {
-            max-width: 1400px;
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
-    </style>
-    """
-)
-
 # --- 1. Data Loading and Preprocessing ---
 @st.cache_data
-def load_and_prepare_data(csv_path='data/RESULTADOS/df_desmatamento_pib_queimadas_bolsa.csv'): # ATUALIZE O CAMINHO SE NECESSÁRIO
+def load_and_prepare_data(csv_path='data/RESULTADOS/df_final.csv'): 
     try:
         df_raw = pd.read_csv(csv_path)
         df = df_raw.copy()
@@ -32,7 +19,6 @@ def load_and_prepare_data(csv_path='data/RESULTADOS/df_desmatamento_pib_queimada
             'Município': 'municipio',
             'Ano': 'ano',
             'Código IBGE': 'codigo_ibge',
-            'Localização': 'localizacao', # Não usada diretamente nos gráficos, mas pode ser útil
             'Desmatamento (km²)': 'desmatamento_km2',
             'PIB per capita (R$)': 'pib_per_capita',
             'PIB (R$ 1.000)': 'pib_total_mil_reais',
@@ -56,13 +42,10 @@ def load_and_prepare_data(csv_path='data/RESULTADOS/df_desmatamento_pib_queimada
         #     if df[col].dtype == 'object':
         #         df[col] = df[col].str.replace(',', '.', regex=False).astype(float)
 
-        # Certificar que 'codigo_ibge' é string para o mapa
+        # Certifica que 'codigo_ibge' é string para o mapa
         df['codigo_ibge'] = df['codigo_ibge'].astype(str)
-        # Certificar que 'ano' é int
+        # Certifica que 'ano' é int
         df['ano'] = df['ano'].astype(int)
-
-        # Remover anos que não têm todos os dados ou são problemáticos (Ex: se 2024 for projeção parcial)
-        # df = df[df['ano'] < 2024] # Exemplo
 
         return df
     except FileNotFoundError:
@@ -75,8 +58,8 @@ def load_and_prepare_data(csv_path='data/RESULTADOS/df_desmatamento_pib_queimada
 df_data = load_and_prepare_data() # Carrega seus dados consolidados
 
 # --- Load GeoJSON ---
-geojson_path = 'data/geojson/municipios_pa.json' # MANTENHA SEU CAMINHO
-feature_id_key_geojson = 'properties.id'       # MANTENHA SEU ID KEY
+geojson_path = 'data/GEOJSON/municipios_pa.json' 
+feature_id_key_geojson = 'properties.id'      
 
 @st.cache_data
 def load_geojson(path):

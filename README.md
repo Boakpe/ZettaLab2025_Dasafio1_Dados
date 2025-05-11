@@ -32,6 +32,8 @@ desafio1_zetta_lab/
    streamlit run dashboard.py
    ```
 
+OBS: Testado com Python 3.12.9
+
 ## Sobre
 
 - Dados: disponíveis na pasta `data/`

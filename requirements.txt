@@ -3,3 +3,6 @@ streamlit
 plotly
 scikit-learn
 statsmodels
+shap 
+lightgbm
+unidecode

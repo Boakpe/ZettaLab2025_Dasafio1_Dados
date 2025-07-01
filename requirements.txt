@@ -6,3 +6,4 @@ statsmodels
 shap 
 lightgbm
 unidecode
+optuna

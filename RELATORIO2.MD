@@ -53,12 +53,11 @@ O desempenho final dos modelos no conjunto de teste (ano de 2022) demonstrou exc
 
 | Modelo | Métrica | Valor | Descrição |
 | :--- | :--- | :--- | :--- |
-| **PIB per Capita** | R² | 0.941 | Coeficiente de Determinação |
-| **VAB Agropecuária** | R² | 0.985 | Coeficiente de Determinação |
-| **Benefícios Sociais** | R² | 0.989 | Coeficiente de Determinação |
-| **Saúde Respiratória** | R² | 0.887 | Coeficiente de Determinação |
+| **PIB per Capita** | R² | 0.499 | Coeficiente de Determinação |
+| **VAB Agropecuária** | R² | 0.929 | Coeficiente de Determinação |
+| **Benefícios Sociais** | R² | 0.944 | Coeficiente de Determinação |
+| **Saúde Respiratória** | R² | 0.858 | Coeficiente de Determinação |
 
-Os altos valores de R² indicam que os modelos foram tecnicamente bem-sucedidos em explicar a variância dos dados. A questão fundamental, portanto, não é a capacidade preditiva do modelo, mas *o que ele nos revela sobre a importância relativa de cada fator*.
 
 ### 3. Análise de Resultados: A Desconexão Revelada
 

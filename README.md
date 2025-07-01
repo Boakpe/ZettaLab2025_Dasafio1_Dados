@@ -1,39 +1,60 @@
-# Desafio I: Ciência e Governança de Dados - Zetta Lab 2025
+# Desafio II: Ciência e Governança de Dados - Zetta Lab 2025
 
-Este repositório contém a solução para o Desafio I do Zetta Lab 2025.
+Este repositório contém a solução completa para os **Desafios I e II** do Zetta Lab 2025, abrangendo desde a aquisição e exploração de dados até a modelagem preditiva e a criação de um dashboard interativo para análise dos impactos do desmatamento no estado do Pará.
 
 ## Acesso ao Dashboard Interativo
 
-Você pode acessar o dashboard interativo diretamente no Streamlit Cloud através do seguinte link:
+Você pode acessar o dashboard interativo, que inclui as previsões dos modelos, diretamente no Streamlit Cloud através do seguinte link:
 
-➡️ **[Acessar Dashboard](https://boakpe-zettalab2025-dasafio1-dados-dashboard.streamlit.app/)** ⬅️
+➡️ **[Acessar Dashboard](https://boakpe-zettalab2025-dasafio1-dados-dashboard2-09cv3g.streamlit.app/)** ⬅️ 
+*(Link atualizado para o novo dashboard, se aplicável, ou mantenha o antigo se foi atualizado no mesmo link)*
 
 Alternativamente, siga as instruções abaixo para executá-lo localmente.
+
+## Principais Adições do Desafio II
+
+Esta nova fase do projeto avançou da análise exploratória para a modelagem preditiva, com as seguintes adições:
+- **Novos Dados:** Inclusão de dados de **Internações por Doenças Respiratórias** do DATASUS para medir o impacto na saúde pública.
+- **Modelagem Preditiva:** Treinamento de **4 modelos de Machine Learning (LightGBM)** para prever a evolução de:
+  1. PIB per Capita
+  2. VAB Agropecuária
+  3. Benefícios Sociais (Bolsa Família)
+  4. Internações por Doenças Respiratórias
+- **Novo Dashboard:** Um novo dashboard foi criado (`dashboard2.py`) para incluir as previsões dos modelos, permitir simulações de cenários futuros e apresentar análises de importância das variáveis (SHAP e LightGBM).
+- **Relatório Final:** Documentação completa da metodologia de modelagem, resultados e recomendações estratégicas (`RELATÓRIO2.MD`).
 
 ## Estrutura do Projeto
 
 ```
-desafio1_zetta_lab/
-├── data/             # Dados brutos utilizados no desafio (IBGE, INPE, etc.)
-├── src/              # Notebooks de processamento e ETL dos dados
-│   ├── integracao.ipynb  # Integra e consolida todos os dados processados em um dataset final
-│   ├── pib.ipynb         # Processa e filtra os dados de PIB dos municípios do Pará
-│   ├── plantacoes.ipynb  # Processa dados de área plantada de soja e milho
-│   ├── queimadas.ipynb   # Processa dados de focos de queimadas
-│   ├── rebanho.ipynb     # Processa dados do rebanho bovino
-│   └── # (Outros notebooks de processamento, ex: desmatamento, Bolsa Família)
-├── dashboard.py      # Código do dashboard interativo em Streamlit
-├── requirements.txt  # Dependências do projeto Python
-├── RELATÓRIO.pdf     # Relatório final detalhado em PDF
-├── RELATÓRIO.md      # Relatório final em formato Markdown
-└── README.md         # Este arquivo
+desafio_zetta_lab_final/
+├── data/                       # Dados brutos utilizados no desafio (IBGE, INPE, DATASUS, etc.)
+│   └── RESULTADOS/             # Dados processados e consolidados
+├── models/                     # Modelos de Machine Learning treinados e salvos (.joblib)
+│   ├── modelo_pib_pred.joblib
+│   ├── ...
+├── notebooks/                  # Notebooks Jupyter para cada etapa do projeto
+│   ├   # Notebooks da fase de ETL (Desafio I)
+│   │   ├── pib.ipynb
+│   │   ├── plantacoes.ipynb
+│   │   ├── queimadas.ipynb
+│   │   ├── ...
+│   │   └── integracao.ipynb
+│   │   # Notebooks da fase de modelagem (Desafio II)
+│   └── 2_Modelagem/            
+│       ├── doencas_respiratorias.ipynb  # ETL para os novos dados de saúde
+│       └── train_models.ipynb         # Treinamento, validação e salvamento dos 4 modelos
+├── dashboard2.py               # Código do dashboard interativo final (Streamlit)
+├── requirements.txt            # Dependências do projeto Python
+├── relatorio_fase_1.md         # Relatório da primeira fase (Análise Exploratória)
+├── relatorio_final.md          # Relatório conclusivo do projeto (Desafio II)
+└── README.md                   # Este arquivo
 ```
 
 ## Como Executar Localmente
 
-Para executar o projeto em sua máquina local, siga os passos:
+Para executar o projeto e o dashboard interativo em sua máquina local, siga os passos abaixo:
 
-1.  **Clone o repositório (se ainda não o fez):**
+1.  **Clone o repositório:**
     ```bash
     git clone https://github.com/Boakpe/ZettaLab2025_Dasafio1_Dados.git
     cd ZettaLab2025_Dasafio1_Dados
@@ -55,19 +76,26 @@ Para executar o projeto em sua máquina local, siga os passos:
 
 4.  **Execute o dashboard:**
     ```bash
-    streamlit run dashboard.py
+    streamlit run dashboard2.py
     ```
+    O dashboard será aberto em seu navegador padrão.
 
-**Observação:** O projeto foi testado com Python 3.12.9.
+**Observação:** O projeto foi desenvolvido e testado com Python 3.10+.
 
-## Sobre o Processamento de Dados
+## Sobre as Etapas do Projeto
 
-*   **Dados Fonte:** Os dados brutos utilizados neste desafio, provenientes de diversas fontes como IBGE, INPE, entre outros, estão localizados na pasta `data/`.
-*   **Processamento e ETL:** A etapa de processamento dos dados foi realizada por meio de Jupyter Notebooks, que se encontram na pasta `src/`. Cada notebook é responsável por tratar uma fonte de dados específica (PIB, plantações, queimadas, rebanho, etc.), culminando no notebook `integracao.ipynb`, que consolida todas as informações em um dataset final utilizado pelo dashboard.
+1.  **Processamento de Dados (ETL):** Os dados brutos, localizados na pasta `data/`, foram processados e limpos usando Jupyter Notebooks (`notebooks/1_ETL_Dados/`). O notebook `integracao.ipynb` consolida todas as fontes em um dataset final.
+2.  **Modelagem Preditiva:** Na pasta `notebooks/2_Modelagem/`, o notebook `doencas_respiratorias.ipynb` trata os novos dados de saúde. Em seguida, `train_models.ipynb` executa a engenharia de features, a otimização de hiperparâmetros (com Optuna) e o treinamento dos quatro modelos LightGBM, salvando os artefatos finais na pasta `models/`.
+3.  **Visualização e Análise:** O `dashboard2.py` carrega os modelos salvos e os dados processados para fornecer uma plataforma interativa de visualização de previsões, análise de cenários e interpretação dos fatores de influência (SHAP).
 
 ## Relatórios
 
 A análise detalhada, as metodologias empregadas, os insights obtidos e as conclusões do projeto estão documentados nos seguintes arquivos:
 
+Parte I:
+*   `RELATÓRIO.pdf`: Relatório final em formato PDF.
+*   `RELATÓRIO.md`: Relatório final em formato Markdown.
+
+Parte II:
 *   `RELATÓRIO.pdf`: Relatório final em formato PDF.
 *   `RELATÓRIO.md`: Relatório final em formato Markdown.

@@ -82,7 +82,7 @@ def generate_future_predictions(df_city, num_years_to_predict, model, model_cols
 def generate_state_level_predictions(_df_all_cities, num_years, _model, _model_cols, target_column_name):
     # (código inalterado)
     all_predictions = []
-    cities_with_enough_data = [city for city, data in _df_all_cities.groupby('Município') if len(data) >= 2]
+    cities_with_enough_data = [city for city, data in _df_all_cities.groupby('Município', observed=False) if len(data) >= 2]
     progress_bar = st.progress(0, text=f"Calculando previsões para {target_column_name}...")
     for i, city_name in enumerate(cities_with_enough_data):
         city_data = _df_all_cities[_df_all_cities['Município'] == city_name]
@@ -92,7 +92,7 @@ def generate_state_level_predictions(_df_all_cities, num_years, _model, _model_c
     progress_bar.empty()
     if not all_predictions: return pd.DataFrame(columns=['Ano', 'Predicted Value'])
     full_state_predictions = pd.concat(all_predictions)
-    aggregated_predictions = full_state_predictions.groupby('Ano')['Predicted Value'].mean().reset_index()
+    aggregated_predictions = full_state_predictions.groupby('Ano', observed=False)['Predicted Value'].mean().reset_index()
     return aggregated_predictions
 
 # --- Generic UI Function (no change) ---
@@ -102,8 +102,8 @@ def create_prediction_tab(df_all_data, selected_view, num_years, model, model_co
         st.header(f"Análise Agregada: {target_friendly_name} Médio do Estado")
         with st.spinner(f'Gerando previsões agregadas...'):
             future_predictions_df = generate_state_level_predictions(df_all_data, num_years, model, model_cols, target_column_name)
-        history_df = df_all_data.groupby('Ano')[target_column_name].mean().reset_index()
-        desmatamento_df = df_all_data.groupby('Ano')['Desmatamento (km²)'].mean().reset_index()
+        history_df = df_all_data.groupby('Ano', observed=False)[target_column_name].mean().reset_index()
+        desmatamento_df = df_all_data.groupby('Ano', observed=False)['Desmatamento (km²)'].mean().reset_index()
         chart_title = f'{target_friendly_name} e Desmatamento Médio no Estado'
     else:
         city_data = df_all_data[df_all_data['Município'] == selected_view].copy()
@@ -163,7 +163,7 @@ def prepare_data_for_shap(_df):
     ]
     for feature in features_to_lag:
         if feature in df_temp.columns:
-            df_temp[f'{feature}_lag1'] = df_temp.groupby('Município')[feature].shift(1)
+            df_temp[f'{feature}_lag1'] = df_temp.groupby('Município', observed=False)[feature].shift(1)
             lag_col = df_temp[f'{feature}_lag1']
             growth = np.where(lag_col != 0, (df_temp[feature] - lag_col) / lag_col, 0)
             df_temp[f'{feature}_growth'] = growth
